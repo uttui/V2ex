@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <img src="img/lALPGpb_8E3AFrfNBADNBAA_1024_1024.png" alt="">
+    </div>
+    <div id="hot">
+        <input type="button" @click="add" value="最热主题">
+        <input type="button" @click="add" value="最新主题">
+    </div>
+    <br>
+    <td ></td>
+    <div class="box" id="app">
+        <div class="cell item" v-for="it in topics" style="margin-bottom: 15px;">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td width="48" valign="top" align="center">
+                            <a href="#">
+                                <img :src="it.member.avatar_normal" class="avatar" border="0" align="default" alt="clevercsc">
+                            </a>
+                        </td>
+                        <td width="10"></td>
+                        <td width="auto" valign="middle">
+                            <span class="item_title">
+                                <a href="/t/705542#reply22" class="topic-link"> {{it.title}} </a>
+                            </span>
+                            <div class="sep5"></div>
+                            <span class="topic_info">
+                                <div class="votes"></div>
+                                <a class="node" href="/go/programmer"> {{it.node.title}} </a> 
+                                &nbsp;•&nbsp; 
+                                <strong>
+                                    <a href="/member/clevercsc"> {{it.member.username}} </a>
+                                </strong>
+                                &nbsp;•&nbsp; {{formatDate(it.created)}} &nbsp;•&nbsp; 最后回复来自 
+                                <strong>
+                                    <a href="/member/manami"> {{it.last_reply_by}} </a>
+                                </strong>
+                            </span>
+                        </td>
+                        <td width="70" align="right" valign="middle">
+                            <a href="/t/705542#reply22" class="count_livid">{{it.replies}}</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--  -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+    <!-- js -->
+    <script>
+        new Vue ({
+            el: '#app',
+            data () {
+                return {
+                    topics:[]
+                }
+            },
+            mounted () {       
+                axios
+                    .get('http://81.68.180.93:8080/v2ex/api/topics/latest.json')
+                    .then(response => {
+                        console.log(response);
+                        this.topics = response.data
+                    })
+            },
+            methods: {
+                formatDate(time) {
+                    return moment(time * 1000).format('YYYY-MM-DD HH:mm:ss')
+                }
+            }
+        });
+    </script>
+</body>
+</html>
