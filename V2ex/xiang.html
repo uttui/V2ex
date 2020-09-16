@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <img src="img/v2ex@2x.png" alt="">
+        <input id="search" type="text" maxlength="128" autocomplete="off" tabindex="1">
+        <div class="tools">
+            <a href="/signup" class="top">首页</a>
+            <a href="/signup" class="top">注册</a>
+            <a href="/signin" class="top">登录</a>
+            </div>
+    </div>
+    <div class="header" id="app" >
+        <div class="fr"><a href="/member/Rxianbei">
+           <img :src="topic.member.avatar_normal" class="avatar" border="0" align="default" alt="Rxianbei"></a>
+        </div>
+            <a href="/"> {{topic.node.parent_node_name}} </a>
+            <span class="chevron">&nbsp;›&nbsp;</span> 
+            <a href="/go/qna"> {{topic.node.title}} </a>
+    <div class="sep10"></div>
+            <h1> {{topic.title}} </h1>
+    <div id="topic_707064_votes" class="votes">
+        <small class="gray"><a href="/member/Rxianbei"> {{topic.node.name}} </a> {{formatDate(topic.last_modified)}}  {{topic.replies}} 次点击</small>
+    </div>
+        <div class="markdown_body">
+        <h4> {{topic.content_rendered}} </h4>
+        </div>
+        <div class="cell item" style="margin-bottom: 15px;"></div>
+    
+    
+    <div >
+       <span class="gray">{{topic.replies}} 条回复 &nbsp;• &nbsp; {{formatDate(topic.last_touched)}}</span>
+    <div class="cell">
+        <div class="fr" style="margin: -3px -5px 0px 0px;">
+        <a href="/tag/课程" class="tag"> 课程</a>
+        <a href="/tag/群员" class="tag"> 群员</a>
+        <a href="/tag/base64" class="tag"> base64</a>
+        <a href="/tag/PHP" class="tag"> PHP</a>
+            </div>
+        </div>
+    <div class="cell item" style="margin-bottom: 15px;"></div>
+    </div> 
+        <div id="cop" v-for="it in replies" class="cell" >
+    <td width="48" valign="top" align="center">
+    <img :src="it.member.avatar_normal"class="avatar" border="0" align="default" alt="lengyihan"></td>
+        <td width="auto" valign="top" align="left">
+    <div class="cell item" style="margin-bottom: 15px;"></div>
+        <div class="sep3"></div>
+                <strong><a href="/member/lengyihan" class="dark"> {{it.member.username}} </a>
+                </strong>&nbsp; &nbsp;
+                <span class="ago"> {{formatDate(it.created)}} </span>
+            <div class="sep5"></div>
+            <div class="reply_content"> {{it.content}} </div>
+            </td>
+        <td width="70" align="right" valign="middle">
+            <a href="/t/705542#reply22" class="count_livid">{{it.replies}}</a>
+        </td>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+    <script>
+        new Vue({
+            el:'#app',
+            data(){
+                return{
+                    topic: {},
+                    replies: []
+                }
+            },
+            mounted () {   
+                const id = this.getQueryId()
+                axios
+                    .get('http://81.68.180.93:8080/v2ex/api/topics/show.json?id=' + id)
+                    .then(response => {
+                        console.log(response);
+                        this.topic = response.data[0]
+                    })
+
+                    axios
+                    .get('http://81.68.180.93:8080/v2ex/api/replies/show.json?topic_id=' + id)
+                    .then(response => {
+                        console.log(response);
+                        this.replies = response.data
+                    })    
+            },
+            methods: {
+                formatDate(time) {
+                    return moment(time * 1000).format('YYYY-MM-DD HH:mm:ss')
+                },
+                getQueryId() {
+                    const url = window.location.href
+
+                    const [ , query] = url.split('?')
+
+                    const [, id] = query.split('=')
+                    
+                    return id
+                }
+            }
+        })
+    </script>
+
+</body>
+</html>
