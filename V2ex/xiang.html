@@ -25,7 +25,10 @@
     <div class="sep10"></div>
             <h1> {{topic.title}} </h1>
     <div id="topic_707064_votes" class="votes">
-        <small class="gray"><a href="/member/Rxianbei"> {{topic.node.name}} </a> {{formatDate(topic.last_modified)}}  {{topic.replies}} 次点击</small>
+        <small class="gray">
+            <a href="/member/Rxianbei"> {{topic.node.name}} </a>
+         {{formatDate(topic.last_modified)}}  {{topic.replies}} 次点击
+        </small>
     </div>
         <div class="markdown_body">
         <h4> {{topic.content_rendered}} </h4>
